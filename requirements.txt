@@ -1,0 +1,12 @@
+streamlit
+pydantic==1.10.8
+langchain
+langchain_pinecone
+langchain[docarray]
+pinecone-client
+requests
+langchain-core
+langchain_openai
+openai
+langchain_community
+pypdf
