@@ -4,7 +4,7 @@ from langchain_openai.embeddings import OpenAIEmbeddings
 from langchain_openai.chat_models import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 from langchain.prompts import PromptTemplate
-from langchain_community.document_loaders import WebBaseLoader
+from langchain_community.document_loaders import WebBaseLoader  # Might need modification
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_pinecone import PineconeVectorStore
 from langchain_core.runnables import RunnablePassthrough
@@ -29,9 +29,13 @@ Question: {question}
 """
 prompt = PromptTemplate.from_template(template)
 
-# Load documents
+# Load documents (Focus on potential modification here)
 loader = WebBaseLoader("https://staging.d3emzuksbelz5k.amplifyapp.com")
 pages = loader.load_and_split()
+
+# The error likely originates from the WebBaseLoader. You might need to:
+# 1. Check the WebBaseLoader documentation or source code to understand its output format.
+# 2. If it returns dictionaries with the text as a value within a key, extract the text content using appropriate indexing (e.g., `text = text_dict['content']`).
 
 # Split documents into chunks
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=20)
