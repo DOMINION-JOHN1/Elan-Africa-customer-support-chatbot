@@ -61,10 +61,14 @@ if "history" not in st.session_state:
 def get_response(user_input):
     context = "Here is some context"  # You can modify this to provide dynamic context
     question = user_input
-    
-    # Ensure inputs are strings
+
+    # Ensure inputs are strings (with basic error handling)
     if not isinstance(context, str):
-        context = str(context)
+        try:
+            context = str(context)
+        except:
+            print("Error converting context to string")
+            return "An error occurred while processing your request."
     if not isinstance(question, str):
         question = str(question)
 
