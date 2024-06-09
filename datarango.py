@@ -61,6 +61,17 @@ if "history" not in st.session_state:
 def get_response(user_input):
     context = "Here is some context"  # You can modify this to provide dynamic context
     question = user_input
+    
+    # Ensure inputs are strings
+    if not isinstance(context, str):
+        context = str(context)
+    if not isinstance(question, str):
+        question = str(question)
+
+    # Debugging statements
+    print(f"Context Type: {type(context)}, Value: {context}")
+    print(f"Question Type: {type(question)}, Value: {question}")
+
     response = chain.invoke({"context": context, "question": question})
     return response
 
