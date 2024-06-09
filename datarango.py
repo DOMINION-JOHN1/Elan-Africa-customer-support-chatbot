@@ -1,10 +1,11 @@
 import streamlit as st
 import os
+import json
 from langchain_openai.embeddings import OpenAIEmbeddings
 from langchain_openai.chat_models import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 from langchain.prompts import PromptTemplate
-from langchain_community.document_loaders import WebBaseLoader  # Might need modification
+from langchain_community.document_loaders import WebBaseLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_pinecone import PineconeVectorStore
 from langchain_core.runnables import RunnablePassthrough
@@ -29,13 +30,9 @@ Question: {question}
 """
 prompt = PromptTemplate.from_template(template)
 
-# Load documents (Focus on potential modification here)
+# Load documents
 loader = WebBaseLoader("https://staging.d3emzuksbelz5k.amplifyapp.com")
 pages = loader.load_and_split()
-
-# The error likely originates from the WebBaseLoader. You might need to:
-# 1. Check the WebBaseLoader documentation or source code to understand its output format.
-# 2. If it returns dictionaries with the text as a value within a key, extract the text content using appropriate indexing (e.g., `text = text_dict['content']`).
 
 # Split documents into chunks
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=20)
@@ -67,13 +64,17 @@ def get_response(user_input):
     question = user_input
 
     # Ensure inputs are strings (with basic error handling)
-    if not isinstance(context, str):
+    if isinstance(context, dict):
+        context = json.dumps(context)
+    elif not isinstance(context, str):
         try:
             context = str(context)
         except:
             print("Error converting context to string")
             return "An error occurred while processing your request."
-    if not isinstance(question, str):
+    if isinstance(question, dict):
+        question = json.dumps(question)
+    elif not isinstance(question, str):
         question = str(question)
 
     # Debugging statements
