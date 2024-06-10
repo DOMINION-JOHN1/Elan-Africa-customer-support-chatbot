@@ -10,9 +10,9 @@ from langchain_pinecone import PineconeVectorStore
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.documents import Document
 import PyPDF2
+from langchain_community.document_loaders import PyPDFLoader
 from io import BytesIO
 from langchain_core.documents import Document
-from pypdfloader import PDFLoader
 import requests
 from bs4 import BeautifulSoup
 
@@ -22,13 +22,15 @@ OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 
 # Initialize model and embeddings
 model = ChatOpenAI(openai_api_key=OPENAI_API_KEY, model="gpt-3.5-turbo")
-embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
+embeddings = OpenAIEmbeddings(model="text-embedding-3-large", openai_api_key=OPENAI_API_KEY)
 parser = StrOutputParser()
 
 # Define the prompt template
 template = """
-Answer the questions based on the context below. If you can't
-answer the question, reply "I don't have such information in my database". Also answer expertly any code related question you are asked.
+Derive all your answers based on the information in the context. Be creative, don't just recommend pages on the website.
+Write out the answer to the question directly to the user instead of directing them to the site. 
+Ensure you know about Elan Africa, its vision, mission, and what it does generally. 
+Even if you don't know the answer immediately, go through the context again and provide the most accurate answer and suggestion. 
 
 Context: {context}
 
@@ -104,7 +106,7 @@ text_splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=20)
 documents = text_splitter.split_documents(pages_content)
 
 # Create Pinecone Vector Store
-index_name = "datarango"
+index_name = "elan"
 pinecone = PineconeVectorStore.from_documents(documents, embeddings, index_name=index_name)
 
 # Define the chain
