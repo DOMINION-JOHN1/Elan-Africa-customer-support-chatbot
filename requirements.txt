@@ -11,3 +11,4 @@ openai
 langchain_community
 pypdf
 bs4
+PyPDF2
