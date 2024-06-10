@@ -107,7 +107,7 @@ documents = text_splitter.split_documents(pages_content)
 
 # Create Pinecone Vector Store
 index_name = "elan"
-pinecone = PineconeVectorStore.from_documents(documents, embeddings, index_name=index_name)
+pinecone = PineconeVectorStore(embeddings, index_name=index_name)
 
 # Define the chain
 chain = (
