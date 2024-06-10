@@ -40,6 +40,7 @@ prompt = PromptTemplate.from_template(template)
 prompt.format(context="Here is some context", question="Here is a question")
 
 # Function to extract text from PDF
+"""
 def extract_text_from_pdf(url):
     response = requests.get(url)
     pdf_file = BytesIO(response.content)
@@ -104,9 +105,9 @@ pages_content = fetch_all_pages("https://elanafrica.com/")
 # Split documents into chunks
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=20)
 documents = text_splitter.split_documents(pages_content)
-
+"""
 # Create Pinecone Vector Store
-index_name = "elan"
+index_name = "elanrag"
 pinecone = PineconeVectorStore(index_name=index_name, embedding=embeddings)
 
 # Define the chain
