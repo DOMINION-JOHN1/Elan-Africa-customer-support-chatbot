@@ -1,6 +1,5 @@
 import streamlit as st
 import os
-import json
 from langchain_openai.embeddings import OpenAIEmbeddings
 from langchain_openai.chat_models import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
@@ -29,6 +28,7 @@ Context: {context}
 Question: {question}
 """
 prompt = PromptTemplate.from_template(template)
+prompt.format(context="Here is some context", question="Here is a question")
 
 # Load documents
 loader = WebBaseLoader("https://staging.d3emzuksbelz5k.amplifyapp.com")
@@ -60,28 +60,8 @@ if "history" not in st.session_state:
 
 # Function to get response from the bot
 def get_response(user_input):
-    context = "Here is some context"  # You can modify this to provide dynamic context
     question = user_input
-
-    # Ensure inputs are strings (with basic error handling)
-    if isinstance(context, dict):
-        context = json.dumps(context)
-    elif not isinstance(context, str):
-        try:
-            context = str(context)
-        except:
-            print("Error converting context to string")
-            return "An error occurred while processing your request."
-    if isinstance(question, dict):
-        question = json.dumps(question)
-    elif not isinstance(question, str):
-        question = str(question)
-
-    # Debugging statements
-    print(f"Context Type: {type(context)}, Value: {context}")
-    print(f"Question Type: {type(question)}, Value: {question}")
-
-    response = chain.invoke({"context": context, "question": question})
+    response = chain.invoke(question)
     return response
 
 # Text input for user question
@@ -92,7 +72,7 @@ if user_input:
     response = get_response(user_input)
     st.session_state.history.append({"user": user_input, "bot": response})
 
-# Display chat history
+# Display chat 
 for chat in st.session_state.history:
     st.write(f"You: {chat['user']}")
     st.write(f"Bot: {chat['bot']}")
