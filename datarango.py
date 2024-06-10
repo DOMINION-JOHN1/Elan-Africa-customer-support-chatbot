@@ -31,7 +31,7 @@ prompt = PromptTemplate.from_template(template)
 prompt.format(context="Here is some context", question="Here is a question")
 
 # Load documents
-loader = WebBaseLoader("https://staging.d3emzuksbelz5k.amplifyapp.com")
+loader = WebBaseLoader("https://elanafrica.com/")
 pages = loader.load_and_split()
 
 # Split documents into chunks
@@ -51,8 +51,8 @@ chain = (
 )
 
 # Streamlit app setup
-st.title("Chat with Datango Bot")
-st.write("Ask any question and get a response based on the provided context.")
+st.title("Chat with elanAfrica customer support bot")
+st.write("Ask any question about elanAfrica today :earth_africa:.")
 
 # Initialize session state for chat history
 if "history" not in st.session_state:
